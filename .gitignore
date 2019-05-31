@@ -1,0 +1,15 @@
+
+.vs/049Rework/v16/.suo
+*.lock
+*.ide
+.vs/049Rework/v16/Server/sqlite3/storage.ide-shm
+.vs/049Rework/v16/Server/sqlite3/storage.ide-wal
+049Rework/obj/Debug/049Rework.csproj.CoreCompileInputs.cache
+049Rework/obj/Debug/049Rework.csprojAssemblyReference.cache
+049Rework/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+049Rework/Properties/AssemblyInfo.cs
+*.dll
+049Rework/obj/Debug/049Rework.csproj.CopyComplete
+049Rework/obj/Debug/049Rework.csproj.FileListAbsolute.txt
+049Rework/obj/Debug/PlagueRework.pdb
+Builds/PlagueRework.pdb
