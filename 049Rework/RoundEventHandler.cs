@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace PlagueRework
 {
-	class RoundEventHandler : IEventHandlerRoundStart, IEventHandlerRoundEnd, IEventHandlerSetRole
+	class RoundEventHandler : IEventHandlerRoundStart, IEventHandlerRoundEnd, IEventHandlerSetRole, IEventHandlerPlayerDie
 	{
 		private readonly PlagueRework plugin;
 
@@ -114,6 +114,22 @@ namespace PlagueRework
                 }
             }
             zombies = zombiecount;
+        }
+
+        private IEnumerator<float> RespawnZombie(PlayerDeathEvent ev)
+        {
+            yield return Timing.WaitForSeconds(0.1f);
+            ev.Player.ChangeRole(Role.SCP_049_2);
+            ev.Player.Teleport(ev.Killer.GetPosition());
+        }
+
+        public void OnPlayerDie(PlayerDeathEvent ev)
+        {
+            if(ev.DamageTypeVar == DamageType.SCP_049)
+            {
+                Timing.RunCoroutine(RespawnZombie(ev));
+                ev.SpawnRagdoll = false;
+            }
         }
     }
 }
