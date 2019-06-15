@@ -8,15 +8,17 @@ using UnityEngine;
 
 namespace PlagueRework
 {
-	class RoundEventHandler : IEventHandlerRoundStart, IEventHandlerRoundEnd, IEventHandlerSetRole, IEventHandlerPlayerDie
-	{
-		private readonly PlagueRework plugin;
+    class RoundEventHandler : IEventHandlerRoundStart, IEventHandlerRoundEnd, IEventHandlerSetRole, IEventHandlerPlayerDie
+    {
+        private readonly PlagueRework plugin;
 
-		public RoundEventHandler(PlagueRework plugin) => this.plugin = plugin;
+        public RoundEventHandler(PlagueRework plugin) => this.plugin = plugin;
 
         private bool RoundInProgress = false;
         private int zombies = 0;
         public Player plaguecache = null;
+
+        private List<string> Scp966Bs = new List<string> { };
 
 
         private IEnumerator<float> Heal()
@@ -70,6 +72,13 @@ namespace PlagueRework
         private IEnumerator<float> ZombieTimer()
         {
             yield return Timing.WaitForSeconds(2f);
+            foreach(Player player in plugin.Server.GetPlayers())
+            {
+                if(player.TeamRole.Role == Role.SCP_049_2)
+                {
+                    Scp966Bs.Add(player.SteamId);
+                }
+            }
             while(RoundInProgress == true)
             {
                 yield return Timing.WaitForSeconds(5f);
@@ -87,13 +96,14 @@ namespace PlagueRework
                     plaguecache = player;
                 }
             }
-            Timing.RunCoroutine(Heal());
             Timing.RunCoroutine(ZombieTimer());
+            Timing.RunCoroutine(Heal());            
         }
 
 		public void OnRoundEnd(RoundEndEvent ev)
 		{
             RoundInProgress = false;
+            Scp966Bs.Clear();
 		}
 
 		public void OnRoundStart(RoundStartEvent ev)
@@ -114,7 +124,7 @@ namespace PlagueRework
             int zombiecount = 0;
             foreach (Player player in plugin.Server.GetPlayers()) // Updating zombie count
             {
-                if (player.TeamRole.Role == Role.SCP_049_2 && player.GetRankName() == "SCP-966")
+                if (player.TeamRole.Role == Role.SCP_049_2 && !Scp966Bs.Contains(player.SteamId))
                 {
                     zombiecount += 1;
                 }
@@ -135,6 +145,10 @@ namespace PlagueRework
             {
                 Timing.RunCoroutine(RespawnZombie(ev));
                 ev.SpawnRagdoll = false;
+            }
+            if(Scp966Bs.Contains(ev.Player.SteamId))
+            {
+                Scp966Bs.Remove(ev.Player.SteamId);
             }
             if(ev.Player.TeamRole.Role == Role.SCP_049)
             {

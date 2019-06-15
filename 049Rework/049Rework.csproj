@@ -49,6 +49,9 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TargetedGhostmode">
+      <HintPath>D:\Serveur SCPSL\TargetedGhostmode.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>..\..\..\..\Desktop\Serveur SCPSL\Event-Admin-Plugin-1.8.1\References\UnityEngine.dll</HintPath>
     </Reference>
@@ -60,6 +63,9 @@
     <Compile Include="049Rework.cs" />
     <Compile Include="RoundEventHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
