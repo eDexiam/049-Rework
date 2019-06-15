@@ -36,8 +36,9 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>..\..\..\..\Desktop\Serveur SCPSL\SCPSLGamemodes-2.0.0-gmm\References\Assembly-CSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>..\..\..\..\Desktop\Serveur SCPSL\Event-Admin-Plugin-1.8.1\References\Assembly-CSharp-firstpass.dll</HintPath>
+    <Reference Include="Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\Serveur SCPSL\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="Smod2">
       <HintPath>..\..\..\..\Desktop\Serveur SCPSL\Event-Admin-Plugin-1.8.1\References\Smod2.dll</HintPath>

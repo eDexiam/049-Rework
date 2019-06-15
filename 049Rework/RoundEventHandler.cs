@@ -18,21 +18,13 @@ namespace PlagueRework
         private int zombies = 0;
         public Player plaguecache = null;
 
-        private int plaguehealth;
-        private int peanuthealth;
-        private int whiteboithindickhealth;
-        private int blackdudehealth;
-        private int blindshithealth;
-        private int helicopterhealth;
-        private int serpentsdickheadhealth;
-        private bool allowsetrolehpcache = false;
-
 
         private IEnumerator<float> Heal()
         {
             yield return Timing.WaitForSeconds(2f);
             while(RoundInProgress == true)
             {
+                if (plaguecache == null) continue;
                 yield return Timing.WaitForSeconds(1f);
                 if(plugin.GetConfigInt("049_maximumhealpersecond") > zombies && plugin.GetConfigInt("049_maximumhealpersecond") != 0)
                 {
@@ -46,27 +38,27 @@ namespace PlagueRework
                 {
                     if(Vector.Distance(player.GetPosition(), plaguecache.GetPosition()) <= plugin.GetConfigInt("049_healradius"))
                     {
-                        if(player.TeamRole.Role == Role.SCP_173 && player.GetHealth() < peanuthealth)
+                        if(player.TeamRole.Role == Role.SCP_173 && player.GetHealth() < player.TeamRole.MaxHP)
                         {
                             player.AddHealth(zombies);
                         }
-                        if (player.TeamRole.Role == Role.SCP_106 && player.GetHealth() < blackdudehealth)
+                        if (player.TeamRole.Role == Role.SCP_106 && player.GetHealth() < player.TeamRole.MaxHP)
                         {
                             player.AddHealth(zombies);
                         }
-                        if (player.TeamRole.Role == Role.SCP_096 && player.GetHealth() < whiteboithindickhealth)
+                        if (player.TeamRole.Role == Role.SCP_096 && player.GetHealth() < player.TeamRole.MaxHP)
                         {
                             player.AddHealth(zombies);
                         }
-                        if (player.TeamRole.Role == Role.SCP_939_53 && player.GetHealth() < blindshithealth || player.TeamRole.Role == Role.SCP_939_89 && player.GetHealth() < blindshithealth)
+                        if (player.TeamRole.Role == Role.SCP_939_53 && player.GetHealth() < player.TeamRole.MaxHP || player.TeamRole.Role == Role.SCP_939_89 && player.GetHealth() < player.TeamRole.MaxHP)
                         {
                             player.AddHealth(zombies);
                         }
-                        if (player.TeamRole.Role == Role.SCP_049_2 && player.GetHealth() < helicopterhealth)
+                        if (player.TeamRole.Role == Role.SCP_049_2 && player.GetHealth() < player.TeamRole.MaxHP)
                         {
                             player.AddHealth(zombies);
                         }
-                        if (player.TeamRole.Role == Role.TUTORIAL && player.GetHealth() < serpentsdickheadhealth)
+                        if (player.TeamRole.Role == Role.TUTORIAL && player.GetHealth() < player.TeamRole.MaxHP)
                         {
                             player.AddHealth(zombies);
                         }
@@ -99,14 +91,6 @@ namespace PlagueRework
             Timing.RunCoroutine(ZombieTimer());
         }
 
-        private IEnumerator<float> GetMaxHealth()
-        {
-            yield return Timing.WaitForSeconds(1f);
-            UpdateCacheThingy();
-            yield return Timing.WaitForSeconds(2f);
-            allowsetrolehpcache = true;
-        }
-
 		public void OnRoundEnd(RoundEndEvent ev)
 		{
             RoundInProgress = false;
@@ -118,41 +102,11 @@ namespace PlagueRework
             zombies = 0;
             plaguecache = null;
             Timing.RunCoroutine(Plaguecache());
-            allowsetrolehpcache = false;
-            Timing.RunCoroutine(GetMaxHealth());
-		}
+        }
 
         public void OnSetRole(PlayerSetRoleEvent ev)
         {
             CheckZombies();
-            if(ev.Role == Role.SCP_049)
-            {
-                plaguecache = ev.Player;
-            }
-            if (ev.Player.TeamRole.Role == Role.SCP_096)
-            {
-                whiteboithindickhealth = ev.Player.GetHealth();
-            }
-            if (ev.Player.TeamRole.Role == Role.SCP_106)
-            {
-                blackdudehealth = ev.Player.GetHealth();
-            }
-            if (ev.Player.TeamRole.Role == Role.SCP_173)
-            {
-                peanuthealth = ev.Player.GetHealth();
-            }
-            if (ev.Player.TeamRole.Role == Role.SCP_939_53 || ev.Player.TeamRole.Role == Role.SCP_939_89)
-            {
-                blindshithealth = ev.Player.GetHealth();
-            }
-            if (ev.Player.TeamRole.Role == Role.SCP_049_2)
-            {
-                helicopterhealth = ev.Player.GetHealth();
-            }
-            if(ev.Player.TeamRole.Role == Role.TUTORIAL)
-            {
-                serpentsdickheadhealth = ev.Player.GetHealth();
-            }
         }
 
         private void CheckZombies()
@@ -160,7 +114,7 @@ namespace PlagueRework
             int zombiecount = 0;
             foreach (Player player in plugin.Server.GetPlayers()) // Updating zombie count
             {
-                if (player.TeamRole.Role == Role.SCP_049_2)
+                if (player.TeamRole.Role == Role.SCP_049_2 && player.GetRankName() == "SCP-966")
                 {
                     zombiecount += 1;
                 }
@@ -182,33 +136,10 @@ namespace PlagueRework
                 Timing.RunCoroutine(RespawnZombie(ev));
                 ev.SpawnRagdoll = false;
             }
-        }
-
-        private void UpdateCacheThingy()
-        {
-            foreach (Player player in plugin.Server.GetPlayers())
+            if(ev.Player.TeamRole.Role == Role.SCP_049)
             {
-                if (player.TeamRole.Role == Role.SCP_096)
-                {
-                    whiteboithindickhealth = player.GetHealth();
-                }
-                if (player.TeamRole.Role == Role.SCP_106)
-                {
-                    blackdudehealth = player.GetHealth();
-                }
-                if (player.TeamRole.Role == Role.SCP_173)
-                {
-                    peanuthealth = player.GetHealth();
-                }
-                if (player.TeamRole.Role == Role.SCP_939_53 || player.TeamRole.Role == Role.SCP_939_89)
-                {
-                    blindshithealth = player.GetHealth();
-                }
-                if(player.TeamRole.Role == Role.SCP_049_2)
-                {
-                    helicopterhealth = player.GetHealth();
-                }
-            }
+                plaguecache = null;
+            } 
         }
     }
 }
