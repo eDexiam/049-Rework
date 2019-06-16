@@ -141,19 +141,19 @@ namespace PlagueRework
 
         public void OnPlayerDie(PlayerDeathEvent ev)
         {
-            if(ev.DamageTypeVar == DamageType.SCP_049)
+            if (ev.DamageTypeVar == DamageType.SCP_049)
             {
                 Timing.RunCoroutine(RespawnZombie(ev));
                 ev.SpawnRagdoll = false;
             }
-            if(Scp966Bs.Contains(ev.Player.SteamId))
+            if (Scp966Bs.Contains(ev.Player.SteamId))
             {
                 Scp966Bs.Remove(ev.Player.SteamId);
             }
-            if(ev.Player.TeamRole.Role == Role.SCP_049)
+            if (ev.Player.TeamRole.Role == Role.SCP_049)
             {
                 plaguecache = null;
-            } 
+            }
         }
     }
 }
