@@ -14,6 +14,8 @@ namespace PlagueRework
 
         public RoundEventHandler(PlagueRework plugin) => this.plugin = plugin;
 
+        // I should probably rework this plugin at some point
+
         private bool RoundInProgress = false;
         private int zombies = 0;
         public Player plaguecache = null;
